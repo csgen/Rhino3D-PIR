@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <Version>1.0</Version>
+    <Title>DisplayResearch</Title>
+    <Description>Description of DisplayResearch</Description>
+    <TargetExt>.rhp</TargetExt>
+    <UseWpf>true</UseWpf>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="EmbeddedResources\**\*" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="RhinoCommon" Version="7.13.21348.13001" IncludeAssets="compile;build" />
+  </ItemGroup>
+  
+</Project>
