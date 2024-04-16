@@ -1,6 +1,6 @@
-﻿using DisplayResearch.Def;
-using DisplayResearch.DisplayConduit;
-using DisplayResearch.MouseClick;
+﻿using RhinoTool.Def;
+using RhinoTool.DisplayConduit;
+using RhinoTool.MouseClick;
 using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DisplayResearch
+namespace RhinoTool
 {
     internal class ModuleCreator
     {

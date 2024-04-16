@@ -1,4 +1,5 @@
-﻿using Rhino;
+﻿using App;
+using Rhino;
 using Rhino.Commands;
 using Rhino.Geometry;
 using Rhino.Input;
@@ -28,9 +29,9 @@ namespace DisplayResearch
             // TODO: start here modifying the behaviour of your command.
             // ---
             //RhinoApp.WriteLine("The {0} command will add a line right now.", EnglishName);
+            MainWindow window = new MainWindow();
+            window.Show();
 
-            ModuleCreator moduleCreator = new ModuleCreator();
-            
             RhinoApp.WriteLine("The {0} command added a Displayer to the document.", EnglishName);
 
             // ---

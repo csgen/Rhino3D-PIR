@@ -10,11 +10,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="EmbeddedResources\**\*" />
+    <None Remove="EmbeddedResources\plugin-utility.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="EmbeddedResources\plugin-utility.ico" />
   </ItemGroup>
   
   <ItemGroup>
     <PackageReference Include="RhinoCommon" Version="7.13.21348.13001" IncludeAssets="compile;build" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\App\MyApp.csproj" />
   </ItemGroup>
   
 </Project>

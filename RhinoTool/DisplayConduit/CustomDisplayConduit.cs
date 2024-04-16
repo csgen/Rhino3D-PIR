@@ -1,5 +1,6 @@
-﻿using DisplayResearch.Def;
-using DisplayResearch.MouseClick;
+﻿using RhinoTool.Def;
+using RhinoTool.MouseClick;
+using Rhino;
 using Rhino.Display;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DisplayResearch.DisplayConduit
+namespace RhinoTool.DisplayConduit
 {
     internal class CustomDisplayConduit: Rhino.Display.DisplayConduit
     {
@@ -72,6 +73,7 @@ namespace DisplayResearch.DisplayConduit
             unpickedMaterial.Transparency = 0.4;
             return unpickedMaterial;
         }
+
         protected override void PostDrawObjects(DrawEventArgs e)
         {
             base.PostDrawObjects(e);
@@ -99,6 +101,54 @@ namespace DisplayResearch.DisplayConduit
                     }
                 }
             }
+        }
+
+        protected override void CalculateBoundingBox(CalculateBoundingBoxEventArgs e)
+        {
+            foreach(var module in Modules)
+            {
+                e.IncludeBoundingBox(module.BrepObj.GetBoundingBox(false));
+            }
+            base.CalculateBoundingBox(e);
+        }
+
+        public void SetTwoViewLayout(RhinoDoc doc)
+        {
+            Rhino.Display.RhinoView[] views = doc.Views.GetViewList(true, false);
+
+            doc.Views.ActiveView.Maximized = true;
+
+            int activeViewWidth = doc.Views.ActiveView.Size.Width;
+            int activeViewHeight = doc.Views.ActiveView.Size.Height;
+
+            foreach(var view in views)
+            {
+                view.Close();
+            }
+
+            //string filePath = "D:/华东院/自动强排/测试/ViewportTemplate.3dm";
+            //var file = Rhino.FileIO.File3dm.Read(filePath);
+
+            //// 遍历文件中的所有视图
+            //foreach (var viewInfo in file.Views)
+            //{
+            //    // 创建或找到一个与文件中相同名称的视图
+            //    Rhino.Display.RhinoView rhinoView = doc.Views.Find(viewInfo.Name, true);
+            //    if (rhinoView == null)
+            //    {
+            //        // 如果视图不存在，则创建一个新的视图
+            //        rhinoView = doc.Views.Add(viewInfo.Name, viewInfo.Viewport.Projection, viewInfo.Viewport.Bounds, true);
+            //    }
+
+            //    // 应用视图设置
+            //    rhinoView.ActiveViewport.SetProjection(viewInfo.Viewport.Projection, viewInfo.Viewport.CameraDirection, viewInfo.Viewport.CameraLocation);
+            //    rhinoView.Redraw();
+            //}
+
+
+            var view1 = doc.Views.Add("1", DefinedViewportProjection.Top, new System.Drawing.Rectangle(0, 0, activeViewWidth/2, activeViewHeight), false);
+            
+            var view2 = doc.Views.Add("2", DefinedViewportProjection.Perspective, new System.Drawing.Rectangle(activeViewWidth / 2, 0, activeViewWidth / 2, activeViewHeight), false);
         }
     }
 }

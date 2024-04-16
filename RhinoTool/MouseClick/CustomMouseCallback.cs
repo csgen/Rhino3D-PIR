@@ -1,4 +1,4 @@
-﻿using DisplayResearch.Def;
+﻿using RhinoTool.Def;
 using Rhino.Geometry;
 using Rhino.Input.Custom;
 using Rhino;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DisplayResearch.MouseClick
+namespace RhinoTool.MouseClick
 {
     internal class CustomMouseCallback : MouseCallback
     {
