@@ -8,6 +8,8 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Rhino.DocObjects;
+using Rhino.Geometry;
 
 namespace RhinoTool.DisplayConduit
 {
@@ -112,43 +114,44 @@ namespace RhinoTool.DisplayConduit
             base.CalculateBoundingBox(e);
         }
 
+        /// <summary>
+        /// 将视窗设置为左右并列
+        /// </summary>
+        /// <param name="doc"></param>
         public void SetTwoViewLayout(RhinoDoc doc)
         {
-            Rhino.Display.RhinoView[] views = doc.Views.GetViewList(true, false);
-
-            doc.Views.ActiveView.Maximized = true;
-
-            int activeViewWidth = doc.Views.ActiveView.Size.Width;
-            int activeViewHeight = doc.Views.ActiveView.Size.Height;
-
-            foreach(var view in views)
+            // 调整视窗布局
+            RhinoView[] views = doc.Views.GetViewList(true, false);
+            
+            if (views.Length > 0)
             {
-                view.Close();
+                var view = views[0];
+                view.Maximized = true;
+                int activeViewWidth = view.Size.Width;
+                int activeViewHeight = view.Size.Height;
+
+                var standardViews = doc.Views.GetStandardRhinoViews();
+                for (int i = standardViews.Count() - 1; i >= 0; i--)
+                {
+                    var curView = standardViews[i];
+                    var viewInfo = new ViewInfo(curView.ActiveViewport);
+                    if (viewInfo.Name == "Top" || viewInfo.Name == "Perspective")
+                    {
+                        curView.Size = new Size(activeViewWidth / 2, activeViewHeight);
+                    }
+                }
             }
 
-            //string filePath = "D:/华东院/自动强排/测试/ViewportTemplate.3dm";
-            //var file = Rhino.FileIO.File3dm.Read(filePath);
-
-            //// 遍历文件中的所有视图
-            //foreach (var viewInfo in file.Views)
-            //{
-            //    // 创建或找到一个与文件中相同名称的视图
-            //    Rhino.Display.RhinoView rhinoView = doc.Views.Find(viewInfo.Name, true);
-            //    if (rhinoView == null)
-            //    {
-            //        // 如果视图不存在，则创建一个新的视图
-            //        rhinoView = doc.Views.Add(viewInfo.Name, viewInfo.Viewport.Projection, viewInfo.Viewport.Bounds, true);
-            //    }
-
-            //    // 应用视图设置
-            //    rhinoView.ActiveViewport.SetProjection(viewInfo.Viewport.Projection, viewInfo.Viewport.CameraDirection, viewInfo.Viewport.CameraLocation);
-            //    rhinoView.Redraw();
-            //}
-
-
-            var view1 = doc.Views.Add("1", DefinedViewportProjection.Top, new System.Drawing.Rectangle(0, 0, activeViewWidth/2, activeViewHeight), false);
-            
-            var view2 = doc.Views.Add("2", DefinedViewportProjection.Perspective, new System.Drawing.Rectangle(activeViewWidth / 2, 0, activeViewWidth / 2, activeViewHeight), false);
+            // 缩放视角
+            BoundingBox boundingBox = BoundingBox.Empty;
+            foreach (var module in Modules)
+            {
+                boundingBox.Union(module.BrepObj.GetBoundingBox(true));
+            }
+            foreach (var view in views)
+            {
+                view.ActiveViewport.ZoomBoundingBox(boundingBox);
+            }
         }
     }
 }

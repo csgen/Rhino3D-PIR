@@ -6,6 +6,7 @@ using Rhino.Input;
 using Rhino.Input.Custom;
 using System;
 using System.Collections.Generic;
+using System.Windows.Interop;
 
 namespace DisplayResearch
 {
@@ -31,6 +32,10 @@ namespace DisplayResearch
             //RhinoApp.WriteLine("The {0} command will add a line right now.", EnglishName);
             MainWindow window = new MainWindow();
             window.Show();
+
+            IntPtr rhinoMainWindowHandle = RhinoApp.MainWindowHandle();
+            WindowInteropHelper wpfHelper = new WindowInteropHelper(window);
+            wpfHelper.Owner = rhinoMainWindowHandle;
 
             RhinoApp.WriteLine("The {0} command added a Displayer to the document.", EnglishName);
 

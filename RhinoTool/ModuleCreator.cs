@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Rhino;
 
 namespace RhinoTool
 {
@@ -50,6 +51,8 @@ namespace RhinoTool
             Displayer.Enabled = true;
             MouseCaller = new CustomMouseCallback(Modules);
             MouseCaller.Enabled = true;
+
+            RhinoDoc.ActiveDoc.Views.Redraw();
         }
     }
 }
